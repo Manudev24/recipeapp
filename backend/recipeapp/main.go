@@ -19,7 +19,7 @@ func main() {
 	r := gin.Default()
 	r.POST("/signup", controllers.SignUp)
 	r.POST("/login", controllers.Login)
-	r.POST("/validate", middleware.RequireAuth, controllers.Validate)
+	r.POST("/loadData", middleware.RequireAuth, controllers.LoadData)
 	r.POST("/changeUserPassword", middleware.RequireAuth, controllers.ChangePassword)
 	r.Run()
 }

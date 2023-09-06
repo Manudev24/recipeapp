@@ -19,9 +19,10 @@ func SignUp(c *gin.Context) {
 	//Get the phone and password
 
 	var body struct {
-		UserName string `json:"userName"`
-		Name     string `json:"name"`
-		Password string `json:"password"`
+		UserName  string `json:"userName"`
+		FirstName string `json:"firstName"`
+		LastName  string `json:"lastName"`
+		Password  string `json:"password"`
 	}
 
 	if c.Bind(&body) != nil {
@@ -32,10 +33,11 @@ func SignUp(c *gin.Context) {
 		return
 	}
 
-	if body.Name == "" || body.UserName == "" || body.Password == "" {
+	if body.FirstName == "" || body.LastName == "" || body.UserName == "" || body.Password == "" {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"Error": "Empty fields",
 		})
+		return
 	}
 
 	//Hash the password
@@ -59,7 +61,8 @@ func SignUp(c *gin.Context) {
 	user := models.User{
 		ID:              uuid.New(),
 		UserName:        body.UserName,
-		Name:            body.Name,
+		FirstName:       body.FirstName,
+		LastName:        body.LastName,
 		Password:        string(hash),
 		PasswordVersion: uuid.New(),
 		MembershipId:    membershipId,
@@ -79,7 +82,7 @@ func SignUp(c *gin.Context) {
 
 func Login(c *gin.Context) {
 
-	//Get the phone and pass of the body
+	//Get the userName and pass of the body
 	var body struct {
 		UserName string `json:"userName"`
 		Password string `json:"password"`
@@ -111,7 +114,7 @@ func Login(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Invalid phone number or password",
+			"error": "Invalid user name or password",
 		})
 
 		return
@@ -205,7 +208,7 @@ func ChangePassword(c *gin.Context) {
 	}
 }
 
-func Validate(c *gin.Context) {
+func LoadData(c *gin.Context) {
 
 	user, _ := c.Get("user")
 
@@ -214,7 +217,8 @@ func Validate(c *gin.Context) {
 		type UserResponse struct {
 			Id         string `json:"id"`
 			UserName   string `json:"userName"`
-			Name       string `json:"name"`
+			FirstName  string `json:"firstName"`
+			LastName   string `json:"lastName"`
 			Membership string `json:"membership"`
 		}
 
@@ -225,7 +229,8 @@ func Validate(c *gin.Context) {
 
 		userResponse.Id = u.ID.String()
 		userResponse.UserName = u.UserName
-		userResponse.Name = u.Name
+		userResponse.FirstName = u.FirstName
+		userResponse.LastName = u.LastName
 		userResponse.Membership = membership.Name
 
 		c.JSON(http.StatusOK, userResponse)
