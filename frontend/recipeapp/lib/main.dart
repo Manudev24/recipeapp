@@ -23,7 +23,9 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'RecipeApp',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Color(0xffFFBB5C)),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Color(0xffFFBB5C),
+        ),
         useMaterial3: true,
       ),
       routes: Routes.routes,
