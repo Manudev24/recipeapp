@@ -1,19 +1,13 @@
 import 'package:flutter/material.dart';
 
-class FavoriteWidget extends StatelessWidget {
-  final String id;
-  const FavoriteWidget({super.key, required this.id});
+class CategoryWidget extends StatelessWidget {
+  const CategoryWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10, left: 10, right: 10),
       child: GestureDetector(
-        onTap: () => Navigator.pushNamed(
-          context,
-          '/recipeScreen',
-          arguments: id,
-        ),
         child: Container(
           decoration: BoxDecoration(
             color: Color(0xffF5F5F5),
@@ -26,13 +20,10 @@ class FavoriteWidget extends StatelessWidget {
             ),
             child: Row(
               children: [
-                Hero(
-                  tag: id,
-                  child: CircleAvatar(
-                    backgroundImage: NetworkImage(
-                        'https://hips.hearstapps.com/hmg-prod/images/delish-202002-pozole-0392-landscape-pf-1582315071.jpg?crop=1xw:0.8441943127962085xh;center,top&resize=1200:*'),
-                    radius: 35,
-                  ),
+                CircleAvatar(
+                  backgroundImage: NetworkImage(
+                      'https://hips.hearstapps.com/hmg-prod/images/delish-202002-pozole-0392-landscape-pf-1582315071.jpg?crop=1xw:0.8441943127962085xh;center,top&resize=1200:*'),
+                  radius: 35,
                 ),
                 SizedBox(
                   width: 10,
@@ -42,13 +33,13 @@ class FavoriteWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Rice with Chicken',
+                        'Breakfast',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
-                        'A simple rice recipe is a delicious and versatile dish that can serve as a side or main dish.',
+                        'Breakfast is the first meal of the day consumed after waking up, usually in the morning.',
                         style: TextStyle(
                           color: Color(0xff737373),
                         ),

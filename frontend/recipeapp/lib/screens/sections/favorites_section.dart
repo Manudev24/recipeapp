@@ -17,8 +17,12 @@ class _FavoritesSectionState extends State<FavoritesSection> {
       ),
       body: Column(
         children: [
-          FavoriteWidget(),
-          FavoriteWidget(),
+          FavoriteWidget(
+            id: '10',
+          ),
+          FavoriteWidget(
+            id: '10',
+          ),
         ],
       ),
     );

@@ -10,7 +10,7 @@ import (
 type DailyRecipe struct {
 	gorm.Model
 	ID       uuid.UUID `gorm:"type:char(36);primary_key;"`
-	userId   string
+	UserId   string
 	RecipeId string
-	date     time.Time
+	Date     time.Time
 }

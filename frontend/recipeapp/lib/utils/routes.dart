@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:recipeapp/check_auth_status.dart';
+import 'package:recipeapp/screens/categories_screen.dart';
 import 'package:recipeapp/screens/chief_screen.dart';
+import 'package:recipeapp/screens/daily_recipes_screen.dart';
 import 'package:recipeapp/screens/get_started_screen.dart';
 import 'package:recipeapp/screens/home_screen.dart';
 import 'package:recipeapp/screens/loading_user_data_screen.dart';
@@ -21,5 +23,7 @@ class Routes {
     '/recipeScreen': (BuildContext context) => const RecipeScreen(),
     '/chiefScreen': (BuildContext context) => const ChiefScreen(),
     '/searchRecipeScreen': (BuildContext context) => const SearchRecipeScreen(),
+    '/categoriesScreen': (BuildContext context) => const CategoriesScreen(),
+    '/dailyRecipesScreen': (BuildContext context) => const DailyRecipesScreen(),
   };
 }

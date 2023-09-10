@@ -29,7 +29,7 @@ class _MyAppState extends State<MyApp> {
         useMaterial3: true,
       ),
       routes: Routes.routes,
-      initialRoute: '/',
+      initialRoute: '/loginScreen',
     );
   }
 }

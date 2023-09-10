@@ -100,10 +100,13 @@ class _HomeSectionState extends State<HomeSection> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              Text(
-                'View All',
-                style: TextStyle(
-                  color: Color(0xffE25E3E),
+              GestureDetector(
+                onTap: () => Navigator.pushNamed(context, '/categoriesScreen'),
+                child: Text(
+                  'View All',
+                  style: TextStyle(
+                    color: Color(0xffE25E3E),
+                  ),
                 ),
               ),
             ],
@@ -211,10 +214,14 @@ class _HomeSectionState extends State<HomeSection> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              Text(
-                'View All',
-                style: TextStyle(
-                  color: Color(0xffE25E3E),
+              GestureDetector(
+                onTap: () =>
+                    Navigator.pushNamed(context, '/dailyRecipesScreen'),
+                child: Text(
+                  'View All',
+                  style: TextStyle(
+                    color: Color(0xffE25E3E),
+                  ),
                 ),
               ),
             ],

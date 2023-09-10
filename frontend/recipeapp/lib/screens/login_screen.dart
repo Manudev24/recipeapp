@@ -177,33 +177,37 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                           ),
-                          onPressed: () async {
-                            if (_formKey.currentState != null &&
-                                _formKey.currentState!.validate()) {
-                              setState(() {
-                                isLoading = true; //
-                              });
-
-                              String? token = await UserApi.loginUser(
-                                userNameController.text,
-                                passwordController.text,
-                              );
-
-                              if (token != null) {
-                                await SecureStorage.secureStorage
-                                    .write(key: "token", value: token);
-                                Navigator.pushNamedAndRemoveUntil(
-                                    context,
-                                    '/loadingUserDataScreen',
-                                    (Route<dynamic> route) => false);
-                              } else {
-                                _showAlertDialog(context);
-                              }
-
-                              setState(() {
-                                isLoading = false;
-                              });
-                            }
+                          // onPressed: () async {
+                          //   if (_formKey.currentState != null &&
+                          //       _formKey.currentState!.validate()) {
+                          //     setState(() {
+                          //       isLoading = true; //
+                          //     });
+                          //
+                          //     String? token = await UserApi.loginUser(
+                          //       userNameController.text,
+                          //       passwordController.text,
+                          //     );
+                          //
+                          //     if (token != null) {
+                          //       await SecureStorage.secureStorage
+                          //           .write(key: "token", value: token);
+                          //       Navigator.pushNamedAndRemoveUntil(
+                          //           context,
+                          //           '/loadingUserDataScreen',
+                          //           (Route<dynamic> route) => false);
+                          //     } else {
+                          //       _showAlertDialog(context);
+                          //     }
+                          //
+                          //     setState(() {
+                          //       isLoading = false;
+                          //     });
+                          //   }
+                          // },
+                          onPressed: () {
+                            Navigator.pushNamedAndRemoveUntil(context,
+                                '/homeScreen', (Route<dynamic> route) => false);
                           },
                           child: !isLoading
                               ? Text(
