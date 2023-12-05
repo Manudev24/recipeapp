@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:recipeapp/screens/sections/favorites_section.dart';
-import 'package:recipeapp/screens/sections/home_section.dart';
-import 'package:recipeapp/screens/sections/imc_section.dart';
-import 'package:recipeapp/screens/sections/settings_section.dart';
+import 'package:cookingenial/screens/sections/favorites_section.dart';
+import 'package:cookingenial/screens/sections/home_section.dart';
+import 'package:cookingenial/screens/sections/imc_section.dart';
+import 'package:cookingenial/screens/sections/settings_section.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

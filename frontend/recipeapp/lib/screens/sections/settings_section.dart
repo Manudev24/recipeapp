@@ -14,25 +14,25 @@ class _SettingsSectionState extends State<SettingsSection> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings'),
+        title: const Text('Settings'),
       ),
       body: Center(
         child: Column(
           children: [
-            CircleAvatar(
+            const CircleAvatar(
               radius: 60,
               backgroundImage: NetworkImage(
                 'https://as2.ftcdn.net/v2/jpg/03/64/21/11/1000_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg',
               ),
             ),
-            Text(
+            const Text(
               'Victor Estevez',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
               ),
             ),
-            Text(
+            const Text(
               'Basic',
               style: TextStyle(
                 fontSize: 20,
@@ -155,6 +155,46 @@ class _SettingsSectionState extends State<SettingsSection> {
                             CupertinoIcons.right_chevron,
                           )
                         ],
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom:
+                              BorderSide(width: 1, color: Colors.grey[300]!),
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                SvgPicture.asset(
+                                  'assets/icons/signOutIcon.svg',
+                                  height: 20,
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                const Text(
+                                  'Sign out',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const Icon(
+                              CupertinoIcons.right_chevron,
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),

@@ -2,8 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:recipeapp/services/api/user_api.dart';
-import 'package:recipeapp/services/auth/secure_storage.dart';
+import 'package:cookingenial/models/user_model.dart';
+import 'package:cookingenial/services/api/user_api.dart';
+import 'package:cookingenial/services/auth/secure_storage.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -15,6 +16,14 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController userNameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
+  UserModel? userModel;
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+  }
 
   bool isLoading = false;
   final _formKey = GlobalKey<FormState>();
@@ -41,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffE3E3E3),
+      backgroundColor: const Color(0xffE3E3E3),
       body: SingleChildScrollView(
         child: SafeArea(
           child: Padding(
@@ -51,15 +60,15 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 Column(
                   children: [
-                    Text(
-                      'RecipeApp',
+                    const Text(
+                      'Cookingenial',
                       style:
                           TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 50,
                     ),
-                    Text(
+                    const Text(
                       'Login to your account',
                       style: TextStyle(
                         fontSize: 32,
@@ -67,7 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     Form(
@@ -105,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           Material(
@@ -141,20 +150,20 @@ class _LoginScreenState extends State<LoginScreen> {
                         ],
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Align(
                       alignment: Alignment.centerRight,
                       child: GestureDetector(
                         onTap: () {},
-                        child: Text(
+                        child: const Text(
                           'Forgot your password?',
                           style: TextStyle(color: Color(0xff505050)),
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Material(
@@ -173,44 +182,40 @@ class _LoginScreenState extends State<LoginScreen> {
                                 RoundedRectangleBorder>(
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0),
-                                side: BorderSide(color: Colors.white),
+                                side: const BorderSide(color: Colors.white),
                               ),
                             ),
                           ),
-                          // onPressed: () async {
-                          //   if (_formKey.currentState != null &&
-                          //       _formKey.currentState!.validate()) {
-                          //     setState(() {
-                          //       isLoading = true; //
-                          //     });
-                          //
-                          //     String? token = await UserApi.loginUser(
-                          //       userNameController.text,
-                          //       passwordController.text,
-                          //     );
-                          //
-                          //     if (token != null) {
-                          //       await SecureStorage.secureStorage
-                          //           .write(key: "token", value: token);
-                          //       Navigator.pushNamedAndRemoveUntil(
-                          //           context,
-                          //           '/loadingUserDataScreen',
-                          //           (Route<dynamic> route) => false);
-                          //     } else {
-                          //       _showAlertDialog(context);
-                          //     }
-                          //
-                          //     setState(() {
-                          //       isLoading = false;
-                          //     });
-                          //   }
-                          // },
-                          onPressed: () {
-                            Navigator.pushNamedAndRemoveUntil(context,
-                                '/homeScreen', (Route<dynamic> route) => false);
+                          onPressed: () async {
+                            if (_formKey.currentState != null &&
+                                _formKey.currentState!.validate()) {
+                              setState(() {
+                                isLoading = true; //
+                              });
+
+                              String? token = await UserApi.loginUser(
+                                userNameController.text,
+                                passwordController.text,
+                              );
+
+                              if (token != null) {
+                                await SecureStorage.secureStorage
+                                    .write(key: "token", value: token);
+                                Navigator.pushNamedAndRemoveUntil(
+                                    context,
+                                    '/loadingUserDataScreen',
+                                    (Route<dynamic> route) => false);
+                              } else {
+                                _showAlertDialog(context);
+                              }
+
+                              setState(() {
+                                isLoading = false;
+                              });
+                            }
                           },
                           child: !isLoading
-                              ? Text(
+                              ? const Text(
                                   'Continue',
                                   style: TextStyle(
                                     fontSize: 20,
@@ -222,13 +227,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     LoadingAnimationWidget.threeRotatingDots(
-                                      color: Color(0xff4F4F4F),
+                                      color: const Color(0xff4F4F4F),
                                       size: 25,
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 5,
                                     ),
-                                    Text(
+                                    const Text(
                                       'Loading',
                                       style: TextStyle(
                                         fontSize: 20,
@@ -251,7 +256,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Wrap(
                     alignment: WrapAlignment.center,
                     children: [
-                      Text(
+                      const Text(
                         'You do not have an account yet?',
                         style: TextStyle(
                           fontSize: 16,
@@ -261,7 +266,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       GestureDetector(
                         onTap: () => Navigator.pushReplacementNamed(
                             context, '/signupScreen'),
-                        child: Text(
+                        child: const Text(
                           ' Sign Up',
                           style: TextStyle(
                               fontSize: 16,

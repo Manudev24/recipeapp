@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:recipeapp/widgets/favorite_widget.dart';
+import 'package:cookingenial/widgets/favorite_widget.dart';
 
 class FavoritesSection extends StatefulWidget {
   const FavoritesSection({super.key});
@@ -13,9 +13,9 @@ class _FavoritesSectionState extends State<FavoritesSection> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Favorites'),
+        title: const Text('Favorites'),
       ),
-      body: Column(
+      body: const Column(
         children: [
           FavoriteWidget(
             id: '10',

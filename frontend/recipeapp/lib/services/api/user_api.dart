@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:recipeapp/models/user_model.dart';
-import 'package:recipeapp/services/auth/auth_service.dart';
-import 'package:recipeapp/services/auth/secure_storage.dart';
-import 'package:recipeapp/utils/constans.dart';
+import 'package:cookingenial/models/user_model.dart';
+import 'package:cookingenial/services/auth/auth_service.dart';
+import 'package:cookingenial/services/auth/secure_storage.dart';
+import 'package:cookingenial/utils/constans.dart';
 
 class UserApi {
   static Future<String?> loginUser(
@@ -17,7 +17,7 @@ class UserApi {
     };
 
     try {
-      Response response = await dio.post('${apiUrl}/login', data: dataToSend);
+      Response response = await dio.post('$apiUrl/login', data: dataToSend);
 
       if (response.statusCode == 200) {
         String token = response.data['token'] as String;
@@ -30,6 +30,7 @@ class UserApi {
     } catch (e) {
       print('Error: $e');
     }
+    return null;
   }
 
   static Future<UserModel?> loadUser() async {
@@ -45,7 +46,7 @@ class UserApi {
     );
 
     try {
-      Response response = await dio.post('${apiUrl}/loadData');
+      Response response = await dio.post('$apiUrl/loadData');
 
       if (response.statusCode == 200) {
         return UserModel(

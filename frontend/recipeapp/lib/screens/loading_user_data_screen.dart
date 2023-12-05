@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:recipeapp/models/user_model.dart';
-import 'package:recipeapp/services/api/user_api.dart';
+import 'package:cookingenial/models/user_model.dart';
+import 'package:cookingenial/services/api/user_api.dart';
 
 class LoadingUserDataScreen extends StatefulWidget {
   const LoadingUserDataScreen({super.key});

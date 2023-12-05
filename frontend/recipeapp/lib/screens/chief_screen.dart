@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:recipeapp/widgets/recipe_widget.dart';
+import 'package:cookingenial/widgets/recipe_widget.dart';
 
 class ChiefScreen extends StatefulWidget {
   const ChiefScreen({super.key});
@@ -14,14 +13,14 @@ class _ChiefScreenState extends State<ChiefScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _id = ModalRoute.of(context)?.settings.arguments as String? ?? null;
+    _id = ModalRoute.of(context)?.settings.arguments as String?;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Chief'),
+        title: const Text('Chief'),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -30,18 +29,18 @@ class _ChiefScreenState extends State<ChiefScreen> {
             tag: _id!,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: Image(
+              child: const Image(
                 image: NetworkImage(
                     'https://images.unsplash.com/photo-1576237680582-75be01432ca6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2940&q=80'),
                 fit: BoxFit.cover,
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

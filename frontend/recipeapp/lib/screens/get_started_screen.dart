@@ -15,7 +15,7 @@ class GetStartedScreen extends StatelessWidget {
               const Column(
                 children: [
                   Text(
-                    'Welcome to RecipeApp',
+                    'Bienvenido a Cookingenial',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 32,
@@ -27,7 +27,7 @@ class GetStartedScreen extends StatelessWidget {
                   ),
                   Image(image: AssetImage('assets/images/GetStartedIcon.png')),
                   Text(
-                    'Start You Cooking Journey With Us',
+                    'Comienza tu viaje de cocina con nosotros',
                     style: TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
@@ -35,7 +35,7 @@ class GetStartedScreen extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                   Text(
-                    'Save recipes, create shopping lists, and share your own creations with the community.',
+                    'Guarde recetas, cree listas de compras y comparta sus propias creaciones con la comunidad.',
                     style: TextStyle(
                       fontSize: 20,
                       color: Color(0xff737373),
@@ -72,7 +72,7 @@ class GetStartedScreen extends StatelessWidget {
                         onPressed: () =>
                             Navigator.pushNamed(context, '/loginScreen'),
                         child: const Text(
-                          'Get Started',
+                          'Empezar',
                           style: TextStyle(
                             fontSize: 20,
                             color: Colors.white,

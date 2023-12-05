@@ -1,4 +1,4 @@
-import 'package:recipeapp/services/auth/secure_storage.dart';
+import 'package:cookingenial/services/auth/secure_storage.dart';
 
 class AuthService {
   static Future<bool> isLogged() async {

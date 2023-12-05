@@ -1,3 +1,4 @@
+import 'package:cookingenial/utils/constans.dart';
 import 'package:flutter/material.dart';
 
 class RecipeWidget extends StatefulWidget {
@@ -13,8 +14,8 @@ class _RecipeWidgetState extends State<RecipeWidget> {
   Widget build(BuildContext context) {
     return Container(
       height: 200,
-      width: 150,
-      padding: EdgeInsets.only(right: 10),
+      width: 200,
+      padding: const EdgeInsets.only(right: 10),
       // color: Colors.grey,
       child: GestureDetector(
         onTap: () => Navigator.pushNamed(
@@ -31,14 +32,17 @@ class _RecipeWidgetState extends State<RecipeWidget> {
                 child: Hero(
                   tag: widget.id,
                   child: Image(
-                    image: NetworkImage(
-                        'https://hips.hearstapps.com/hmg-prod/images/delish-202002-pozole-0392-landscape-pf-1582315071.jpg?crop=1xw:0.8441943127962085xh;center,top&resize=1200:*'),
-                    fit: BoxFit.cover,
-                  ),
+                      image: NetworkImage(
+                          '${apiUrl}/recipe/get-image/${widget.id}'),
+                      width: 150,
+                      height: 150,
+                      fit: BoxFit.cover
+                      // fit: BoxFit.cover,
+                      ),
                 ),
               ),
             ),
-            Text(
+            const Text(
               'Rice with chicken',
               overflow: TextOverflow.fade,
               maxLines: 1,
@@ -47,7 +51,7 @@ class _RecipeWidgetState extends State<RecipeWidget> {
                 fontSize: 15,
               ),
             ),
-            Row(
+            const Row(
               children: [
                 Icon(
                   Icons.star,

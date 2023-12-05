@@ -1,8 +1,7 @@
+import 'package:cookingenial/utils/routes.dart';
 import 'package:flutter/material.dart';
-import 'package:recipeapp/check_auth_status.dart';
-import 'package:recipeapp/services/auth/auth_service.dart';
-import 'package:recipeapp/utils/routes.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:pull_down_button/pull_down_button.dart';
 
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -21,15 +20,27 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'RecipeApp',
+      title: 'Cookingenial',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Color(0xffFFBB5C),
+          seedColor: const Color(0xffFFBB5C),
         ),
         useMaterial3: true,
+        extensions: [
+          PullDownButtonTheme(
+            routeTheme: PullDownMenuRouteTheme(
+              backgroundColor: Colors.grey,
+            ),
+            itemTheme: PullDownMenuItemTheme(
+              destructiveColor: Colors.red,
+            ),
+            dividerTheme: PullDownMenuDividerTheme(
+              dividerColor: Colors.black,
+            ),
+          ),
+        ],
       ),
       routes: Routes.routes,
-      initialRoute: '/loginScreen',
     );
   }
 }

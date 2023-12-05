@@ -13,11 +13,3 @@ class UserModel {
     required this.membership,
   });
 }
-
-// ID              uuid.UUID `gorm:"type:char(36);primary_key;"`
-// UserName        string    `gorm:"unique"`
-// Name            string
-// Password        string
-// PasswordVersion uuid.UUID `gorm:"type:char(36)"`
-// MembershipId    string
-// LanguageId      string

@@ -1,7 +1,10 @@
+import 'package:cookingenial/models/category_model.dart';
+import 'package:cookingenial/services/api/category_api.dart';
+import 'package:cookingenial/widgets/chief_widget.dart';
+import 'package:cookingenial/widgets/homeSection/home_category_widget.dart';
+import 'package:cookingenial/widgets/recipe_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:recipeapp/widgets/chief_widget.dart';
-import 'package:recipeapp/widgets/recipe_widget.dart';
 
 class HomeSection extends StatefulWidget {
   const HomeSection({super.key});
@@ -11,13 +14,21 @@ class HomeSection extends StatefulWidget {
 }
 
 class _HomeSectionState extends State<HomeSection> {
+  Future<List<CategoryModel>>? _futureCategories;
+
+  @override
+  void initState() {
+    super.initState();
+    _futureCategories = CategoryApi.getRandomCategories();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Column(
         children: [
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
@@ -45,7 +56,7 @@ class _HomeSectionState extends State<HomeSection> {
               )
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           GestureDetector(
@@ -58,7 +69,7 @@ class _HomeSectionState extends State<HomeSection> {
                 height: 30,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Color(0xffEEEEEE),
+                  color: const Color(0xffEEEEEE),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -67,16 +78,16 @@ class _HomeSectionState extends State<HomeSection> {
                       UnconstrainedBox(
                         child: SvgPicture.asset(
                           'assets/icons/magnifyingIcon.svg',
-                          colorFilter: ColorFilter.mode(
+                          colorFilter: const ColorFilter.mode(
                             Color(0xff737373),
                             BlendMode.srcIn,
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
-                      Text(
+                      const Text(
                         'Search recipe',
                         style: TextStyle(
                           color: Color(0xff737373),
@@ -88,13 +99,13 @@ class _HomeSectionState extends State<HomeSection> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
+              const Text(
                 'Categories',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
@@ -102,7 +113,7 @@ class _HomeSectionState extends State<HomeSection> {
               ),
               GestureDetector(
                 onTap: () => Navigator.pushNamed(context, '/categoriesScreen'),
-                child: Text(
+                child: const Text(
                   'View All',
                   style: TextStyle(
                     color: Color(0xffE25E3E),
@@ -111,104 +122,116 @@ class _HomeSectionState extends State<HomeSection> {
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
           Align(
             alignment: Alignment.centerLeft,
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 5),
-                    child: Column(
+              child: FutureBuilder<List<CategoryModel>>(
+                future: _futureCategories,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Row(
                       children: [
-                        CircleAvatar(
-                          radius: 30,
-                          backgroundImage: NetworkImage(
-                              'https://images.immediate.co.uk/production/volatile/sites/30/2023/03/Big-batch-lamb-stew-e62ace3.jpg?quality=90&webp=true&resize=600,545'),
+                        Padding(
+                          padding: EdgeInsets.only(right: 5),
+                          child: Column(
+                            children: [
+                              CircleAvatar(
+                                radius: 30,
+                              ),
+                              Text("")
+                            ],
+                          ),
                         ),
-                        Text('Breakfast')
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 5),
-                    child: Column(
-                      children: [
-                        CircleAvatar(
-                          radius: 30,
-                          backgroundImage: NetworkImage(
-                              'https://images.immediate.co.uk/production/volatile/sites/30/2023/03/Big-batch-lamb-stew-e62ace3.jpg?quality=90&webp=true&resize=600,545'),
+                        Padding(
+                          padding: EdgeInsets.only(right: 5),
+                          child: Column(
+                            children: [
+                              CircleAvatar(
+                                radius: 30,
+                              ),
+                              Text("")
+                            ],
+                          ),
                         ),
-                        Text('Breakfast')
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 5),
-                    child: Column(
-                      children: [
-                        CircleAvatar(
-                          radius: 30,
-                          backgroundImage: NetworkImage(
-                              'https://images.immediate.co.uk/production/volatile/sites/30/2023/03/Big-batch-lamb-stew-e62ace3.jpg?quality=90&webp=true&resize=600,545'),
+                        Padding(
+                          padding: EdgeInsets.only(right: 5),
+                          child: Column(
+                            children: [
+                              CircleAvatar(
+                                radius: 30,
+                              ),
+                              Text("")
+                            ],
+                          ),
                         ),
-                        Text('Breakfast')
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 5),
-                    child: Column(
-                      children: [
-                        CircleAvatar(
-                          radius: 30,
-                          backgroundImage: NetworkImage(
-                              'https://images.immediate.co.uk/production/volatile/sites/30/2023/03/Big-batch-lamb-stew-e62ace3.jpg?quality=90&webp=true&resize=600,545'),
+                        Padding(
+                          padding: EdgeInsets.only(right: 5),
+                          child: Column(
+                            children: [
+                              CircleAvatar(
+                                radius: 30,
+                              ),
+                              Text("")
+                            ],
+                          ),
                         ),
-                        Text('Breakfast')
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 5),
-                    child: Column(
-                      children: [
-                        CircleAvatar(
-                          radius: 30,
-                          backgroundImage: NetworkImage(
-                              'https://images.immediate.co.uk/production/volatile/sites/30/2023/03/Big-batch-lamb-stew-e62ace3.jpg?quality=90&webp=true&resize=600,545'),
+                        Padding(
+                          padding: EdgeInsets.only(right: 5),
+                          child: Column(
+                            children: [
+                              CircleAvatar(
+                                radius: 30,
+                              ),
+                              Text("")
+                            ],
+                          ),
                         ),
-                        Text('Breakfast')
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 5),
-                    child: Column(
-                      children: [
-                        CircleAvatar(
-                          radius: 30,
-                          backgroundImage: NetworkImage(
-                              'https://images.immediate.co.uk/production/volatile/sites/30/2023/03/Big-batch-lamb-stew-e62ace3.jpg?quality=90&webp=true&resize=600,545'),
+                        Padding(
+                          padding: EdgeInsets.only(right: 5),
+                          child: Column(
+                            children: [
+                              CircleAvatar(
+                                radius: 30,
+                              ),
+                              Text("")
+                            ],
+                          ),
                         ),
-                        Text('Breakfast')
                       ],
-                    ),
-                  ),
-                ],
+                    );
+                  }
+                  if (snapshot.hasError) {
+                    print(snapshot.error);
+                    return const Center(
+                      child: Text('Error to get the categories'),
+                    );
+                  }
+                  if (!snapshot.hasData || snapshot.data?.isEmpty == true) {
+                    return const Center(
+                      child: Text('Categories no found'),
+                    );
+                  }
+                  return Row(
+                    children: [
+                      for (var item in snapshot.data!)
+                        HomeCategoryWidget(categoryModel: item),
+                    ],
+                  );
+                },
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
+              const Text(
                 'Daily recipes',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
@@ -217,7 +240,7 @@ class _HomeSectionState extends State<HomeSection> {
               GestureDetector(
                 onTap: () =>
                     Navigator.pushNamed(context, '/dailyRecipesScreen'),
-                child: Text(
+                child: const Text(
                   'View All',
                   style: TextStyle(
                     color: Color(0xffE25E3E),
@@ -226,21 +249,25 @@ class _HomeSectionState extends State<HomeSection> {
               ),
             ],
           ),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                RecipeWidget(id: "1"),
-                RecipeWidget(id: "2"),
-                RecipeWidget(id: "3"),
-                RecipeWidget(id: "4"),
-              ],
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: const SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  RecipeWidget(id: "4b3e8cea-b657-4cd5-8a47-34b48c7971bd"),
+                  // RecipeWidget(id: "2"),
+                  // RecipeWidget(id: "3"),
+                  // RecipeWidget(id: "4"),
+                ],
+              ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
@@ -257,7 +284,7 @@ class _HomeSectionState extends State<HomeSection> {
               ),
             ],
           ),
-          SingleChildScrollView(
+          const SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [

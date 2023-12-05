@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:recipeapp/widgets/category_widget.dart';
-import 'package:recipeapp/widgets/favorite_widget.dart';
+import 'package:cookingenial/widgets/favorite_widget.dart';
 
 class DailyRecipesScreen extends StatefulWidget {
   const DailyRecipesScreen({super.key});
@@ -14,9 +13,9 @@ class _DailyRecipesScreenState extends State<DailyRecipesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Daily recipes'),
+        title: const Text('Daily recipes'),
       ),
-      body: Column(
+      body: const Column(
         children: [
           FavoriteWidget(
             id: "10",

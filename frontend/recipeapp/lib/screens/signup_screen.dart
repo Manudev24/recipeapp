@@ -15,7 +15,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffE3E3E3),
+      backgroundColor: const Color(0xffE3E3E3),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 40),
@@ -26,7 +26,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 children: [
                   Column(
                     children: [
-                      Text(
+                      const Text(
                         'RecipeApp',
                         style: TextStyle(
                             fontFamily: 'FuzzyBubbles',
@@ -36,7 +36,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       // SizedBox(
                       //   height: 50,
                       // ),
-                      Text(
+                      const Text(
                         'Let us meet you',
                         style: TextStyle(
                           fontSize: 32,
@@ -44,7 +44,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                         textAlign: TextAlign.center,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       Material(
@@ -67,7 +67,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       Material(
@@ -90,7 +90,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       Material(
@@ -113,7 +113,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       Material(
@@ -137,17 +137,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       GestureDetector(
                         onTap: () {},
-                        child: Text(
+                        child: const Text(
                           'By using NameApp you agree to our Term of Service and Privacy Policy.',
                           style: TextStyle(color: Color(0xff505050)),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       Material(
@@ -166,13 +166,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10.0),
-                                  side: BorderSide(color: Colors.white),
+                                  side: const BorderSide(color: Colors.white),
                                 ),
                               ),
                             ),
                             onPressed: () {},
                             child: !isLoading
-                                ? Text(
+                                ? const Text(
                                     'Continue',
                                     style: TextStyle(
                                       fontSize: 20,
@@ -185,13 +185,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       LoadingAnimationWidget.threeRotatingDots(
-                                        color: Color(0xff4F4F4F),
+                                        color: const Color(0xff4F4F4F),
                                         size: 25,
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         width: 5,
                                       ),
-                                      Text(
+                                      const Text(
                                         'Loading',
                                         style: TextStyle(
                                           fontSize: 20,
@@ -204,7 +204,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                     ],
@@ -217,7 +217,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     child: Wrap(
                       alignment: WrapAlignment.center,
                       children: [
-                        Text(
+                        const Text(
                           'Do you already have an account?',
                           style: TextStyle(
                             fontSize: 16,
@@ -227,7 +227,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         GestureDetector(
                           onTap: () => Navigator.pushReplacementNamed(
                               context, '/loginScreen'),
-                          child: Text(
+                          child: const Text(
                             ' Login',
                             style: TextStyle(
                                 fontSize: 16,

@@ -14,7 +14,7 @@ class _ChiefWidgetState extends State<ChiefWidget> {
     return Container(
       height: 200,
       width: 250,
-      padding: EdgeInsets.only(right: 10),
+      padding: const EdgeInsets.only(right: 10),
       // color: Colors.grey,
       child: GestureDetector(
         onTap: () => Navigator.pushNamed(
@@ -30,7 +30,7 @@ class _ChiefWidgetState extends State<ChiefWidget> {
                 borderRadius: BorderRadius.circular(15),
                 child: Hero(
                   tag: widget.id,
-                  child: Image(
+                  child: const Image(
                     image: NetworkImage(
                         'https://images.unsplash.com/photo-1576237680582-75be01432ca6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2940&q=80'),
                     fit: BoxFit.cover,
@@ -38,7 +38,7 @@ class _ChiefWidgetState extends State<ChiefWidget> {
                 ),
               ),
             ),
-            Text(
+            const Text(
               'Juan Martinez',
               overflow: TextOverflow.fade,
               maxLines: 1,

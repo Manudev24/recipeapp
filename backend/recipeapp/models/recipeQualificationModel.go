@@ -1,16 +1,14 @@
 package models
 
 import (
-	"time"
-
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
-type DailyRecipe struct {
+type RecipeQualification struct {
 	gorm.Model
 	ID       uuid.UUID `gorm:"type:char(36);primary_key;"`
 	UserId   string
 	RecipeId string
-	Date     time.Time
+	Score    int32
 }

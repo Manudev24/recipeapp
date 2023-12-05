@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:cookingenial/models/category_model.dart';
+import 'package:cookingenial/utils/constans.dart';
 
 class CategoryWidget extends StatelessWidget {
-  const CategoryWidget({super.key});
+  final CategoryModel categoryModel;
+  const CategoryWidget({super.key, required this.categoryModel});
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +13,7 @@ class CategoryWidget extends StatelessWidget {
       child: GestureDetector(
         child: Container(
           decoration: BoxDecoration(
-            color: Color(0xffF5F5F5),
+            color: const Color(0xffF5F5F5),
             borderRadius: BorderRadius.circular(10),
           ),
           child: Padding(
@@ -22,10 +25,10 @@ class CategoryWidget extends StatelessWidget {
               children: [
                 CircleAvatar(
                   backgroundImage: NetworkImage(
-                      'https://hips.hearstapps.com/hmg-prod/images/delish-202002-pozole-0392-landscape-pf-1582315071.jpg?crop=1xw:0.8441943127962085xh;center,top&resize=1200:*'),
+                      '$apiUrl/category/get-image/${categoryModel.id}'),
                   radius: 35,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 Expanded(
@@ -33,14 +36,14 @@ class CategoryWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Breakfast',
-                        style: TextStyle(
+                        categoryModel.name,
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
-                        'Breakfast is the first meal of the day consumed after waking up, usually in the morning.',
-                        style: TextStyle(
+                        categoryModel.description,
+                        style: const TextStyle(
                           color: Color(0xff737373),
                         ),
                       ),

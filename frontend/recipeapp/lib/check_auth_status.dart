@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:recipeapp/services/auth/auth_service.dart';
+import 'package:cookingenial/services/auth/auth_service.dart';
 
 class CheckAuthStatus extends StatefulWidget {
   const CheckAuthStatus({super.key});
