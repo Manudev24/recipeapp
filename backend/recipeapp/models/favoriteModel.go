@@ -8,6 +8,6 @@ import (
 type Favorite struct {
 	gorm.Model
 	ID       uuid.UUID `gorm:"type:char(36);primary_key;"`
-	UserId   string
-	RecipeId string
+	UserId   uuid.UUID `gorm:"type:char(36);"`
+	RecipeId uuid.UUID `gorm:"type:char(36);"`
 }

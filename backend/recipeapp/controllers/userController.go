@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"path/filepath"
 	"recipeapp/initializers"
 	"recipeapp/models"
 	"time"
@@ -239,4 +240,39 @@ func LoadData(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, gin.H{})
 	}
 
+}
+
+func PostUserImage(c *gin.Context) {
+	id := c.Param("id")
+
+	file, err := c.FormFile("image")
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Failed to read file",
+		})
+		return
+	}
+
+	if err := c.SaveUploadedFile(file, filepath.Join("files/user/images", id+".jpg")); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Failed to save file",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{})
+}
+
+func GetUserImage(c *gin.Context) {
+
+	id := c.Param("id")
+	imagePath := filepath.Join("files/user/images", id+".jpg")
+	if _, err := os.Stat(imagePath); err == nil {
+		c.File(imagePath)
+	} else {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "Image not found",
+		})
+	}
 }

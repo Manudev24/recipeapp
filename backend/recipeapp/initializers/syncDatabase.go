@@ -14,6 +14,7 @@ func SyncDatabase() {
 		&models.RecipeCategory{},
 		&models.RecipeInstruction{},
 		&models.RecipeItem{},
+		&models.Comment{},
 		&models.RecipeQualification{},
 		&models.User{},
 	)

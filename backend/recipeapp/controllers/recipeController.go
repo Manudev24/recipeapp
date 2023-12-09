@@ -15,8 +15,7 @@ import (
 	"github.com/google/uuid"
 )
 
-//array inputs
-
+// array inputs
 type RecipeItem struct {
 	Name        string                 `json:"name"`
 	Ingredients []RecipeItemIngredient `json:"ingredients"`
@@ -65,6 +64,8 @@ type RecipeResponse struct {
 	Name              string                      `json:"name"`
 	Description       string                      `json:"description"`
 	Note              string                      `json:"note"`
+	FavoriteQuantity  int32                       `json:"favoriteQuantity"`
+	IsFavorite        bool                        `json:"isFavorite"`
 	RecipeCategory    []RecipeCategoryResponse    `json:"categories"`
 	RecipeItem        []RecipeItemResponse        `json:"items"`
 	RecipeInstruction []RecipeInstructionResponse `json:"instructions"`
@@ -295,105 +296,186 @@ func CreateRecipe(c *gin.Context) {
 
 func GetRecipeById(c *gin.Context) {
 
+	user, _ := c.Get("user")
+
 	//Get the ID
 	id := c.Param("id")
 
-	//Find the recipe
-	var recipe models.Recipe
-	if err := initializers.DB.First(&recipe, uuid.MustParse(id)).Error; err != nil {
-		if err == gorm.ErrRecordNotFound {
-			c.JSON(http.StatusNotFound, gin.H{
-				"Error": "Recipe not found",
-			})
-			return
-		}
-	}
+	if u, ok := user.(models.User); ok {
 
-	var recipeItem []models.RecipeItem
-	if err := initializers.DB.Find(&recipeItem).Where("recipe_id = ?", id).Error; err != nil {
-		if err == gorm.ErrRecordNotFound {
-			c.JSON(http.StatusNotFound, gin.H{
-				"Error": "Recipe not found",
-			})
-			return
+		//Find the recipe
+		var recipe models.Recipe
+		if err := initializers.DB.First(&recipe, uuid.MustParse(id)).Error; err != nil {
+			if err == gorm.ErrRecordNotFound {
+				c.JSON(http.StatusNotFound, gin.H{
+					"Error": "Recipe not found",
+				})
+				return
+			}
 		}
-	}
 
-	var recipeItemIngredient []models.ItemIngredient
-	if err := initializers.DB.Find(&recipeItemIngredient).Where("recipe_id = ?", id).Error; err != nil {
-		if err == gorm.ErrRecordNotFound {
-			c.JSON(http.StatusNotFound, gin.H{
-				"Error": "Recipe Item Ingredient not found",
-			})
-			return
+		var recipeItem []models.RecipeItem
+		if err := initializers.DB.Find(&recipeItem).Where("recipe_id = ?", id).Error; err != nil {
+			if err == gorm.ErrRecordNotFound {
+				c.JSON(http.StatusNotFound, gin.H{
+					"Error": "Recipe not found",
+				})
+				return
+			}
 		}
-	}
 
-	var recipeInstruction []models.RecipeInstruction
-	if err := initializers.DB.Order("step_number asc").Find(&recipeInstruction).Where("recipe_id = ?", id).Error; err != nil {
-		if err == gorm.ErrRecordNotFound {
-			c.JSON(http.StatusNotFound, gin.H{
-				"Error": "Recipe instructions not found",
-			})
-			return
+		var recipeItemIngredient []models.ItemIngredient
+		if err := initializers.DB.Find(&recipeItemIngredient).Where("recipe_id = ?", id).Error; err != nil {
+			if err == gorm.ErrRecordNotFound {
+				c.JSON(http.StatusNotFound, gin.H{
+					"Error": "Recipe Item Ingredient not found",
+				})
+				return
+			}
 		}
-	}
 
-	var recipeCategoryResponse []RecipeCategoryResponse
-	query := `
+		var recipeInstruction []models.RecipeInstruction
+		if err := initializers.DB.Order("step_number asc").Find(&recipeInstruction).Where("recipe_id = ?", id).Error; err != nil {
+			if err == gorm.ErrRecordNotFound {
+				c.JSON(http.StatusNotFound, gin.H{
+					"Error": "Recipe instructions not found",
+				})
+				return
+			}
+		}
+
+		var recipeCategoryResponse []RecipeCategoryResponse
+		query := `
 				select categories.id,categories.name,categories.description from categories join recipe_categories 
 				on recipe_categories.category_id = categories.id
 				join recipes on recipes.id = recipe_categories.recipe_id where recipes.id = ?
 	`
 
-	if err := initializers.DB.Raw(query, id).Scan(&recipeCategoryResponse).Error; err != nil {
-		fmt.Println("Error to load categories", err)
-		return
-	}
+		if err := initializers.DB.Raw(query, id).Scan(&recipeCategoryResponse).Error; err != nil {
+			fmt.Println("Error to load categories", err)
+			return
+		}
 
-	var recipeItemResponse []RecipeItemResponse
-	for _, item := range recipeItem {
-		var ingredientResponse []IngredientResponse
-		query := `
+		var recipeItemResponse []RecipeItemResponse
+		for _, item := range recipeItem {
+			var ingredientResponse []IngredientResponse
+			query := `
 		SELECT ingredients.id, ingredients.name, ingredients.description, item_ingredients.proportion
 		FROM ingredients
 		JOIN item_ingredients ON ingredients.id = item_ingredients.ingredient_id
 		WHERE item_ingredients.recipe_item_id = ?`
 
-		if err := initializers.DB.Raw(query, item.ID.String()).Scan(&ingredientResponse).Error; err != nil {
-			fmt.Println("Error to load ingredients:", err)
+			if err := initializers.DB.Raw(query, item.ID.String()).Scan(&ingredientResponse).Error; err != nil {
+				fmt.Println("Error to load ingredients:", err)
+				return
+			}
+
+			recipeItemResponse = append(recipeItemResponse, RecipeItemResponse{
+				ID:          item.ID.String(),
+				Name:        item.Name,
+				Ingredients: ingredientResponse,
+			})
+		}
+
+		var recipeInstructionResponse []RecipeInstructionResponse
+		for _, instruction := range recipeInstruction {
+			recipeInstructionResponse = append(recipeInstructionResponse, RecipeInstructionResponse{
+				StepNumber:  instruction.StepNumber,
+				Title:       instruction.Title,
+				Description: instruction.Description,
+			})
+		}
+
+		var isFavorite bool
+		var count int64
+		initializers.DB.Model(&models.Favorite{}).Where("user_id = ? AND recipe_id = ?", u.ID, id).Count(&count)
+
+		if count > 0 {
+			isFavorite = true
+		} else {
+			isFavorite = false
+		}
+
+		var favoriteQuantity int64
+		if err := initializers.DB.Model(&models.Favorite{}).Where("recipe_id = ?", id).Count(&favoriteQuantity).Error; err != nil {
+			fmt.Println("Error to load favorites:", err)
 			return
 		}
 
-		recipeItemResponse = append(recipeItemResponse, RecipeItemResponse{
-			ID:          item.ID.String(),
-			Name:        item.Name,
-			Ingredients: ingredientResponse,
-		})
+		var recipeResponse RecipeResponse
+		recipeResponse = RecipeResponse{
+			ID:                recipe.ID.String(),
+			Name:              recipe.Name,
+			IsFavorite:        isFavorite,
+			FavoriteQuantity:  int32(favoriteQuantity),
+			Description:       recipe.Description,
+			Note:              recipe.Note,
+			RecipeCategory:    recipeCategoryResponse,
+			RecipeItem:        recipeItemResponse,
+			RecipeInstruction: recipeInstructionResponse,
+			Qualification:     0.0,
+		}
+		// Respond
+		c.JSON(http.StatusOK, recipeResponse)
+	} else {
+		c.JSON(http.StatusUnauthorized, gin.H{})
 	}
+}
 
-	var recipeInstructionResponse []RecipeInstructionResponse
-	for _, instruction := range recipeInstruction {
-		recipeInstructionResponse = append(recipeInstructionResponse, RecipeInstructionResponse{
-			StepNumber:  instruction.StepNumber,
-			Title:       instruction.Title,
-			Description: instruction.Description,
-		})
-	}
+func SetFavorite(c *gin.Context) {
 
-	var recipeResponse RecipeResponse
-	recipeResponse = RecipeResponse{
-		ID:                recipe.ID.String(),
-		Name:              recipe.Name,
-		Description:       recipe.Description,
-		Note:              recipe.Note,
-		RecipeCategory:    recipeCategoryResponse,
-		RecipeItem:        recipeItemResponse,
-		RecipeInstruction: recipeInstructionResponse,
-		Qualification:     0.0,
+	user, _ := c.Get("user")
+
+	//Get the ID
+	if u, ok := user.(models.User); ok {
+
+		var body struct {
+			RecipeId string `form:"recipeId"`
+			Status   bool   `form:"status"`
+		}
+
+		if err := c.Bind(&body); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"Error": "Failed to read body",
+			})
+			return
+		}
+
+		fmt.Println(body.RecipeId)
+		fmt.Println(body.Status)
+
+		var recipe models.Recipe
+		if err := initializers.DB.First(&recipe, uuid.MustParse(body.RecipeId)).Error; err != nil {
+			if err == gorm.ErrRecordNotFound {
+				c.JSON(http.StatusNotFound, gin.H{
+					"Error": "Recipe not found",
+				})
+				return
+			}
+		}
+
+		if body.Status {
+			var favorite models.Favorite
+			if err := initializers.DB.First(&favorite, "user_id = ? AND recipe_id = ?", u.ID, recipe.ID).Error; err != nil {
+				if err == gorm.ErrRecordNotFound {
+					favorite = models.Favorite{
+						ID:       uuid.New(),
+						UserId:   u.ID,
+						RecipeId: recipe.ID,
+					}
+					initializers.DB.Create(&favorite)
+				}
+			}
+		} else {
+			if err := initializers.DB.Where("user_id = ? AND recipe_id = ?", u.ID, recipe.ID).Delete(&models.Favorite{}).Error; err == nil {
+
+			}
+		}
+
+		c.JSON(http.StatusOK, gin.H{})
+	} else {
+		c.JSON(http.StatusUnauthorized, gin.H{})
 	}
-	// Respond
-	c.JSON(http.StatusOK, recipeResponse)
 }
 
 func GetRecipeImage(c *gin.Context) {
