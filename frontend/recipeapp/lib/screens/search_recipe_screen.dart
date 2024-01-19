@@ -1,9 +1,8 @@
 import 'package:cookingenial/models/recipe_model.dart';
-import 'package:cookingenial/widgets/search_item_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:shimmer/shimmer.dart';
 
 class SearchRecipeScreen extends StatefulWidget {
   const SearchRecipeScreen({super.key});
@@ -15,6 +14,10 @@ class SearchRecipeScreen extends StatefulWidget {
 class _SearchRecipeScreenState extends State<SearchRecipeScreen> {
   final TextEditingController _textFieldController = TextEditingController();
   late FocusNode _focusNode;
+
+  List<String> filter = ["Nombre", "Categorias", "Ingredientes"];
+
+  int _selectedFilter = 0;
 
   Future<List<RecipeModel>>? _futureProducts;
   // Future<List<RecipeModel>> getRecipes() async {
@@ -95,78 +98,70 @@ class _SearchRecipeScreenState extends State<SearchRecipeScreen> {
                 ],
               ),
             ),
-            Expanded(
-              child: SingleChildScrollView(
-                  child: FutureBuilder<List<RecipeModel>>(
-                future: _futureProducts,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(
-                      child: Shimmer.fromColors(
-                        baseColor: Colors.grey[300]!,
-                        highlightColor: Colors.grey[100]!,
-                        child: Column(
-                          children: [
-                            Container(
-                              width: double.maxFinite,
-                              height: 100.0,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
+            CupertinoButton(
+              padding: EdgeInsets.zero,
+              onPressed: () => showCupertinoDialog<int>(
+                context: context,
+                builder: (BuildContext context) {
+                  return CupertinoAlertDialog(
+                    title: const Text('Seleccione un filtro'),
+                    content: Column(
+                      children: [
+                        SizedBox(
+                          height: 200,
+                          child: CupertinoPicker(
+                            magnification: 1.22,
+                            squeeze: 1.2,
+                            useMagnifier: true,
+                            itemExtent: 25.0,
+                            scrollController: FixedExtentScrollController(
+                              initialItem: _selectedFilter,
                             ),
-                            const SizedBox(
-                              height: 10,
+                            onSelectedItemChanged: (value) {
+                              setState(() {
+                                _selectedFilter = value;
+                              });
+                            },
+                            children: List<Widget>.generate(
+                              filter.length,
+                              (int index) {
+                                return Center(
+                                  child: Text(
+                                    filter[index],
+                                    style: const TextStyle(fontSize: 15),
+                                  ),
+                                );
+                              },
                             ),
-                            Container(
-                              width: double.maxFinite,
-                              height: 100.0,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Container(
-                              width: double.maxFinite,
-                              height: 100.0,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
-                    );
-                  }
-                  if (snapshot.hasError) {
-                    print(snapshot.error);
-                    return const Center(
-                      child: Text('Error to get the recipes'),
-                    );
-                  }
-                  if (!snapshot.hasData || snapshot.data?.isEmpty == true) {
-                    return const Center(
-                      child: Text('recipes no found'),
-                    );
-                  }
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      for (var item in snapshot.data!)
-                        Column(
-                          children: [
-                            SearchItemWidget(recipeModel: item),
-                          ],
+                        const SizedBox(height: 10),
+                        CupertinoButton.filled(
+                          onPressed: () {
+                            setState(() {
+                              Navigator.of(context).pop(_selectedFilter);
+                            });
+                          },
+                          child: const Text('Aceptar'),
                         ),
-                    ],
+                      ],
+                    ),
                   );
                 },
-              )),
-            )
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.arrow_drop_down),
+                  Text(
+                    filter[_selectedFilter],
+                    style: const TextStyle(
+                      fontSize: 20,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),

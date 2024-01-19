@@ -1,10 +1,14 @@
 import 'package:better_player/better_player.dart';
+import 'package:cookingenial/models/comment_model.dart';
 import 'package:cookingenial/models/recipe_model.dart';
 import 'package:cookingenial/services/api/recipe_api.dart';
 import 'package:cookingenial/utils/constans.dart';
+import 'package:cookingenial/utils/functions.dart';
+import 'package:cookingenial/widgets/modal_loading_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:like_button/like_button.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:shimmer/shimmer.dart';
@@ -20,9 +24,16 @@ class RecipeScreen extends StatefulWidget {
 
 class _RecipeScreenState extends State<RecipeScreen> {
   String? _id;
-  Future<RecipeModel>? _futureRecipes;
+  Future<RecipeModel>? _futureRecipe;
+
+  //Issue when textfield is focused
+  var isLoaded = false;
 
   int currentIndex = 0;
+
+  //Comment TextField Controller
+  final TextEditingController _commentController = TextEditingController();
+  int _rating = 5;
 
   late BetterPlayerController _betterPlayerController;
   final GlobalKey<LikeButtonState> _globalKey = GlobalKey<LikeButtonState>();
@@ -43,16 +54,10 @@ class _RecipeScreenState extends State<RecipeScreen> {
   }
 
   Future<bool> onLikeButtonTapped(bool isLiked) async {
-    /// send your request here
-    // final bool success= await sendRequest();
-
-    /// if failed, you can do nothing
-    // return success? !isLiked:isLiked;
+    await RecipeApi.setFavorite(_id!, isLiked);
 
     return !isLiked;
   }
-
-  final int likeCount = 999;
 
   @override
   void initState() {
@@ -65,9 +70,6 @@ class _RecipeScreenState extends State<RecipeScreen> {
     super.dispose();
   }
 
-  //Issue when textfield is focused
-  var isLoaded = false;
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -77,7 +79,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
       //Load video from server
       loadVideo();
       //Load recipe from server
-      _futureRecipes = RecipeApi.getRecipesById(_id!);
+      _futureRecipe = RecipeApi.getRecipesById(_id!);
       isLoaded = true;
     }
   }
@@ -140,7 +142,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
                 return FutureBuilder<RecipeModel>(
-                  future: _futureRecipes,
+                  future: _futureRecipe,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.none) {
                       return Container();
@@ -216,9 +218,9 @@ class _RecipeScreenState extends State<RecipeScreen> {
                               ),
                               LikeButton(
                                 size: 40,
-                                likeCount: likeCount,
+                                likeCount: snapshot.data!.favotiteQuantity!,
                                 key: _globalKey,
-                                isLiked: true,
+                                isLiked: snapshot.data!.isFavorite!,
                                 postFrameCallback: (LikeButtonState state) {
                                   state.controller?.forward();
                                 },
@@ -228,7 +230,6 @@ class _RecipeScreenState extends State<RecipeScreen> {
                                   final ColorSwatch<int> color =
                                       isLiked ? Colors.pinkAccent : Colors.grey;
                                   Widget result;
-
                                   result = Text(
                                     count! >= 1000
                                         ? (count / 1000.0).toStringAsFixed(1) +
@@ -241,9 +242,10 @@ class _RecipeScreenState extends State<RecipeScreen> {
                                   );
                                   return result;
                                 },
-                                likeCountAnimationType: likeCount < 1000
-                                    ? LikeCountAnimationType.part
-                                    : LikeCountAnimationType.none,
+                                likeCountAnimationType:
+                                    snapshot.data!.favotiteQuantity! < 1000
+                                        ? LikeCountAnimationType.part
+                                        : LikeCountAnimationType.none,
                                 likeCountPadding: const EdgeInsets.all(0),
                                 onTap: onLikeButtonTapped,
                               ),
@@ -317,7 +319,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   const Text(
-                                    'Ingredients',
+                                    'Ingredientes',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 20,
@@ -574,122 +576,234 @@ class _RecipeScreenState extends State<RecipeScreen> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       const Text(
-                                        'Comentario',
+                                        'Comentarios',
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 20,
                                         ),
                                       ),
                                       //Button for view comments, show a ModalBottomSheet (showModalBottomSheet)
-                                      IconButton(
-                                        onPressed: () {
-                                          showModalBottomSheet(
-                                            context: context,
-                                            builder: (context) {
-                                              return Container(
-                                                padding: const EdgeInsets.all(
-                                                  10,
-                                                ),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    const Text(
-                                                      'Comentarios',
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 20,
-                                                      ),
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                    //Listview for comments
-                                                    Expanded(
-                                                      child: ListView.builder(
-                                                        itemCount: 10,
-                                                        itemBuilder:
-                                                            (context, index) {
-                                                          return ListTile(
-                                                            leading:
-                                                                CircleAvatar(
-                                                                    backgroundColor:
-                                                                        Colors
-                                                                            .grey,
-                                                                    child: Icon(
-                                                                      CupertinoIcons
-                                                                          .person,
-                                                                      color: Colors
-                                                                          .white,
-                                                                    )),
-                                                            title: Text(
-                                                              'Usuario $index',
-                                                              style: TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
-                                                            ),
-                                                            subtitle: Text(
-                                                                'Comentario $index'),
-                                                          );
-                                                        },
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              );
-                                            },
-                                          );
-                                        },
-                                        icon: Icon(
-                                          CupertinoIcons.chat_bubble,
-                                          color: Colors.black,
-                                        ),
+                                      Icon(
+                                        CupertinoIcons.chat_bubble,
+                                        color: Colors.black,
                                       ),
                                     ],
                                   ),
-                                  Row(
-                                    children: [
-                                      for (var i = 0;
-                                          i < snapshot.data!.qualification!;
-                                          i++)
-                                        Icon(
-                                          CupertinoIcons.star_fill,
-                                          color: Colors.yellow[700],
-                                        ),
-                                      for (var i = 0;
-                                          i <
-                                              (5 -
-                                                  snapshot
-                                                      .data!.qualification!);
-                                          i++)
-                                        Icon(
-                                          CupertinoIcons.star_fill,
-                                          color: Colors.grey[300],
-                                        ),
-                                    ],
-                                  ),
-                                  //InputText for comment
+                                  //Leave a comment
                                   const SizedBox(
                                     height: 10,
                                   ),
-
                                   TextField(
-                                    maxLines: 5,
+                                    controller: _commentController,
                                     decoration: InputDecoration(
-                                      hintText: 'Escribe tu comentario',
                                       border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10),
+                                        borderRadius: BorderRadius.circular(
+                                          10,
+                                        ),
+                                      ),
+                                      hintText: 'Escribe un comentario',
+                                      suffixIcon: IconButton(
+                                        onPressed: () async {
+                                          if (_commentController
+                                              .text.isNotEmpty) {
+                                            showDialog<void>(
+                                              context: context,
+                                              barrierDismissible: false,
+                                              builder: (BuildContext context) {
+                                                return ModalLoadingWidget();
+                                              },
+                                            );
+                                            //TODO:
+                                            if (await RecipeApi.createComment(
+                                              _id!,
+                                              _commentController.text,
+                                              _rating,
+                                            )) {
+                                              Navigator.pop(context);
+                                              _commentController.clear();
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                const SnackBar(
+                                                  content: Text(
+                                                      'Comentario agregado'),
+                                                ),
+                                              );
+                                            } else {
+                                              Navigator.pop(context);
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                const SnackBar(
+                                                  content: Text(
+                                                      'Error al agregar comentario'),
+                                                ),
+                                              );
+                                            }
+                                          }
+                                        },
+                                        icon: Icon(
+                                          CupertinoIcons.paperplane_fill,
+                                          color: Colors.orange,
+                                        ),
                                       ),
                                     ),
                                   ),
-                                  Align(
-                                    alignment: Alignment.centerRight,
-                                    child: ElevatedButton(
-                                      onPressed: () {},
-                                      child: Text('Comentar'),
+                                  //Select qualification
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  RatingBar.builder(
+                                    initialRating: 5,
+                                    minRating: 1,
+                                    direction: Axis.horizontal,
+                                    allowHalfRating: false,
+                                    itemCount: 5,
+                                    itemPadding:
+                                        EdgeInsets.symmetric(horizontal: 4.0),
+                                    itemBuilder: (context, _) => Icon(
+                                      CupertinoIcons.star_fill,
+                                      color: Colors.amber,
+                                    ),
+                                    onRatingUpdate: (rating) {
+                                      _rating = rating.toInt();
+                                    },
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  //See all comments
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 8.0),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        bool isThisLoaded = false;
+                                        Future<List<CommentModel>>?
+                                            _futureComments;
+                                        if (isThisLoaded == false) {
+                                          _futureComments =
+                                              RecipeApi.getAllComments(_id!);
+                                          isThisLoaded = true;
+                                        }
+                                        showModalBottomSheet(
+                                          context: context,
+                                          isScrollControlled: true,
+                                          builder: (BuildContext context) {
+                                            return Container(
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.6,
+                                              child: FutureBuilder<
+                                                  List<CommentModel>>(
+                                                future: _futureComments,
+                                                builder: (context, snapshot) {
+                                                  if (snapshot
+                                                          .connectionState ==
+                                                      ConnectionState.waiting) {
+                                                    return Shimmer.fromColors(
+                                                      baseColor:
+                                                          Colors.grey[300]!,
+                                                      highlightColor:
+                                                          Colors.grey[100]!,
+                                                      child: ListView.builder(
+                                                        itemCount: 5,
+                                                        itemBuilder:
+                                                            (context, index) =>
+                                                                ListTile(
+                                                          leading: CircleAvatar(
+                                                            backgroundColor:
+                                                                Colors
+                                                                    .grey[300],
+                                                          ),
+                                                          title: Container(
+                                                            width:
+                                                                double.infinity,
+                                                            height: 8.0,
+                                                            color: Colors.white,
+                                                          ),
+                                                          subtitle: Container(
+                                                            width:
+                                                                double.infinity,
+                                                            height: 8.0,
+                                                            color: Colors.white,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    );
+                                                  } else if (snapshot
+                                                      .hasError) {
+                                                    return Center(
+                                                        child: Text(
+                                                            'Error: ${snapshot.error}'));
+                                                  } else {
+                                                    return Padding(
+                                                      padding: EdgeInsets.only(
+                                                        bottom: MediaQuery.of(
+                                                                context)
+                                                            .viewInsets
+                                                            .bottom,
+                                                      ),
+                                                      child: Column(
+                                                        children: [
+                                                          Flexible(
+                                                            child: ListView
+                                                                .builder(
+                                                              itemCount:
+                                                                  snapshot.data!
+                                                                      .length,
+                                                              itemBuilder:
+                                                                  (context,
+                                                                      index) {
+                                                                CommentModel
+                                                                    comment =
+                                                                    snapshot.data![
+                                                                        index];
+                                                                return ListTile(
+                                                                  leading:
+                                                                      CircleAvatar(
+                                                                    backgroundImage:
+                                                                        NetworkImage(
+                                                                            '${apiUrl}/user/image/${comment.user.id}'),
+                                                                  ),
+                                                                  title: Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .spaceBetween,
+                                                                    children: [
+                                                                      Text(comment
+                                                                              .user
+                                                                              .firstName +
+                                                                          ' ' +
+                                                                          comment
+                                                                              .user
+                                                                              .lastName),
+                                                                      getStarsQuantity(comment
+                                                                          .score
+                                                                          .toDouble()),
+                                                                    ],
+                                                                  ),
+                                                                  subtitle: Text(
+                                                                      comment
+                                                                          .description),
+                                                                );
+                                                              },
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    );
+                                                  }
+                                                },
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                      child: const Text(
+                                        'Ver todos los comentarios',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ],

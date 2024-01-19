@@ -23,7 +23,7 @@ class _MyAppState extends State<MyApp> {
       title: 'Cookingenial',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xffFFBB5C),
+          seedColor: const Color(0xffFFC674),
         ),
         useMaterial3: true,
         extensions: [

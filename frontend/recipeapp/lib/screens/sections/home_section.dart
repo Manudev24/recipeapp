@@ -1,6 +1,5 @@
 import 'package:cookingenial/models/category_model.dart';
 import 'package:cookingenial/services/api/category_api.dart';
-import 'package:cookingenial/widgets/chief_widget.dart';
 import 'package:cookingenial/widgets/homeSection/home_category_widget.dart';
 import 'package:cookingenial/widgets/recipe_widget.dart';
 import 'package:flutter/material.dart';
@@ -271,7 +270,7 @@ class _HomeSectionState extends State<HomeSection> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Top chiefs',
+                'Latest recipes',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
@@ -287,10 +286,7 @@ class _HomeSectionState extends State<HomeSection> {
           const SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
-              children: [
-                ChiefWidget(id: "5"),
-                ChiefWidget(id: "6"),
-              ],
+              children: [],
             ),
           ),
         ],

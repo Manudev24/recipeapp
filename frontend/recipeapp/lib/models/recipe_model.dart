@@ -8,6 +8,9 @@ class RecipeModel {
   String? description;
   String? note;
   num? qualification;
+  bool? isFavorite;
+  int? favotiteQuantity;
+
   //Detail
   List<RecipeItemModel>? items;
   List<RecipeInstructionsModel>? instructions;
@@ -20,6 +23,8 @@ class RecipeModel {
     this.note,
     this.qualification,
     this.instructions,
+    this.isFavorite,
+    this.favotiteQuantity,
     this.items,
     this.categories,
   });

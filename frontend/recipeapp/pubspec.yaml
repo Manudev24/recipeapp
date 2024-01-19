@@ -40,13 +40,16 @@ dependencies:
   flutter_secure_storage: ^8.1.0
   loading_animation_widget: ^1.2.0+4
   dio: ^5.3.2
-  flutter_native_splash: ^2.3.2
+  flutter_native_splash: ^2.3.6
   shimmer: ^3.0.0
   photo_view: ^0.14.0
   flutter_carousel_widget: ^2.1.0
   better_player: ^0.0.83
   pull_down_button: ^0.9.3
   like_button: ^2.0.5
+  intl: ^0.19.0
+  flutter_spinkit: ^5.2.0
+  flutter_rating_bar: ^4.0.1
 
 dev_dependencies:
   flutter_test:
@@ -73,6 +76,7 @@ flutter:
   assets:
     #Imagens
     - assets/images/
+    - assets/images/bmi/
     - assets/images/splash/logo.png
     #Icons
     - assets/icons/
